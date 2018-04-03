@@ -1,7 +1,7 @@
 library(xgboost)
 library(Metrics)
 # load data
-train <- read.csv("second.csv", head=T)
+train <- read.csv("seconda.csv", head=T)
 #train <- train[,grep("feature|target",names(train))]
 #target<-train[,c(51)]
 #train<-train[,grep("feature",names(train))]
@@ -12,7 +12,7 @@ head(actual)
 test  <- test[,grep("feature",names(test))]
 test<-as.matrix(test)
 
-
+# n = 100
 #depth= 3
 #eta= 0.15
 #ss= 0.6
@@ -38,9 +38,9 @@ for(i in 1:100000){
   predictions <- predict(bst, test,type="response")
   rm(bst)
   rm(train2)
-  loss <- logLoss(actual,predictions)
+  loss <- logLoss(actual,predictions[1:46362])
   print(loss)
-  if(loss < 0.692406){
+  if(loss <0.69244){
     #cat("\ndepth=",depth)
     cat("\neta=",eta)
     cat("\nss=",ss)
@@ -56,6 +56,9 @@ test <- read.csv("numerai_tournament_data.csv", head=T)
 test  <- test[,grep("id|feature",names(test))]
 test$probability <- predictions
 pred <- test[,c("id", "probability")]
-write.csv(pred, file="predictions.csv", quote=F, row.names=F)
-
+write.csv(pred, file="predictions4.csv", quote=F, row.names=F)
+library(beepr)
+for (i in 1:1000){
+  beep()
+}
 #=IF(   AND(B2>=0.5,C2=0),RAND()*(0.499-0.336215555667877 )+0.336215555667877 ,   IF(AND(B2<0.5,C2=1),RAND()*(0.608488261699677 -0.5)+0.5,  B2)     )
